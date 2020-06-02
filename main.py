@@ -1,4 +1,4 @@
-from translation import detect_lang, translate, lang_to_code, is_like_russian
+from translation import translate, lang_to_code, is_like_russian, API_KEY
 
 INTRO_TEXT = 'Привет! Вы находитесь в приватном навыке "Крот-Полиглот". ' \
     'Скажите, какое слово вы хотите перевести с какого на какой язык.' \
@@ -55,6 +55,8 @@ def handler(event, context):
             text = last_phrase
         else:
             text = 'Ох, я забыла, что нужно повторить. Попросите меня лучше что-нибудь перевести.'
+    elif not API_KEY:
+        text = 'Чтобы навык заработал, нужно в переменную API_KEY вставить ключ от API Яндекс.Переводчика.'
     elif translate_main:
         text, translate_state = do_translate(translate_main, translate_state)
     elif translate_ellipsis:

@@ -6,7 +6,9 @@
 , реализованного на Python с использованием 
 [новых фич](https://yandex.ru/blog/dialogs/vesennee-obnovlenie-platformy-dialogov) 
 [Яндекс.Диалогов](https://dialogs.yandex.ru/) -  [грамматик](https://yandex.ru/dev/dialogs/alice/doc/nlu-docpage/) и 
-[хранилища состояний](https://yandex.ru/dev/dialogs/alice/doc/session-persistence-docpage/).
+[хранилища состояний](https://yandex.ru/dev/dialogs/alice/doc/session-persistence-docpage/). 
+Подробнее про эти фичи можно посмотреть в 
+[видеоразборе обновлений платформы](https://www.youtube.com/watch?v=VLza91oQZDA&feature=youtu.be).
 
 Навык занимается переводом слов и фраз между несколькими языковыми парами, 
 используя API Яндекс.Переводчика, и немножко может поддерживать контекст диалога:
@@ -16,8 +18,8 @@
 Навык предназначен для публикации на 
 [Yandex Cloud Functions](https://cloud.yandex.ru/docs/functions/) 
 (для навыков Алисы это бесплатно, но нужно привязать карту). 
-Впервые он был представлен на "Хакатоне 0 марта" (
-[объявление](https://events.yandex.ru/events/hakaton-navykov-29-02-2020), 
+Впервые он был представлен на "Хакатоне 0 марта" 
+([объявление](https://events.yandex.ru/events/hakaton-navykov-29-02-2020), 
 [результаты](https://yandex.ru/blog/dialogs/kak-proshel-fevralskiy-khakaton)).
 
 ## Как запустить навык самостоятельно

@@ -4,8 +4,8 @@ import re
 
 import logging
 
-
-API_KEY = # нужно самостоятельно получить токен в https://yandex.ru/dev/translate/ и вставить сюда
+# нужно самостоятельно получить токен в https://yandex.ru/dev/translate/ и вставить сюда
+API_KEY = None
 
 
 def get_langs_list(key=API_KEY):
@@ -52,6 +52,7 @@ def lang_to_code(lang):
         if code is not None:
             return code
     return None
+
 
 def is_like_russian(text):
     if not text:
