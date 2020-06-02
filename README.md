@@ -1,4 +1,6 @@
 # demo-alice-translate-skill
+![Mole image](https://avatars.mds.yandex.net/get-dialogs/1017510/0479fa286034b99b6294/catalogue-icon-x3)
+
 ## Что это такое
 
 В этом репозитории - пример простого навыка Алисы 
