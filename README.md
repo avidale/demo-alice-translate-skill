@@ -5,8 +5,7 @@
 ["Крот-полиглот"](https://dialogs.yandex.ru/store/skills/622af903-krot-poliglot)
 , реализованного на Python с использованием 
 [новых фич](https://yandex.ru/blog/dialogs/vesennee-obnovlenie-platformy-dialogov) 
-[Яндекс.Диалогов](https://dialogs.yandex.ru/) -  
-[грамматик](https://yandex.ru/dev/dialogs/alice/doc/nlu-docpage/) и 
+[Яндекс.Диалогов](https://dialogs.yandex.ru/) -  [грамматик](https://yandex.ru/dev/dialogs/alice/doc/nlu-docpage/) и 
 [хранилища состояний](https://yandex.ru/dev/dialogs/alice/doc/session-persistence-docpage/).
 
 Навык занимается переводом слов и фраз между несколькими языковыми парами, 
