@@ -1,8 +1,25 @@
+import os
+import pymongo
+import datetime
+
+
 from translation import translate, lang_to_code, is_like_russian, API_KEY
 
 INTRO_TEXT = 'Привет! Вы находитесь в приватном навыке "Крот-Полиглот". ' \
     'Скажите, какое слово вы хотите перевести с какого на какой язык.' \
     'Чтобы выйти, скажите "Хватит".'
+
+
+# If you want to store logs, please connect a mongodb cluster.
+# You can get a free one on https://cloud.mongodb.com.
+MONGODB_URI = os.environ.get('MONGODB_URI')
+db = None
+logs_collection = None
+if MONGODB_URI:
+    # w=0 means fast non-blocking write
+    client = pymongo.MongoClient(MONGODB_URI, w=0)
+    db = client.get_default_database()
+    logs_collection = db.get_collection('logs')
 
 
 def do_translate(form, translate_state):
@@ -46,7 +63,8 @@ def handler(event, context):
     translate_main = intents.get('translate_main')
     translate_ellipsis = intents.get('translate_ellipsis')
     if intents.get('exit'):
-        text = 'Приятно было попереводить для вас! Чтобы вернуться в навык, скажите "Запусти навык Крот-Полиглот". До свидания!'
+        text = 'Приятно было попереводить для вас! ' \
+               'Чтобы вернуться в навык, скажите "Запусти навык Крот-Полиглот". До свидания!'
         end_session = 'true'
     elif intents.get('help'):
         text = INTRO_TEXT
@@ -64,7 +82,7 @@ def handler(event, context):
     elif command:
         text = 'Не поняла вас. Чтобы выйти из навыка "Крот-Полиглот", скажите "Хватит".'
 
-    return {
+    response = {
         'version': event['version'],
         'session': event['session'],
         'response': {
@@ -73,3 +91,15 @@ def handler(event, context):
         },
         'session_state': {'translate': translate_state, 'last_phrase': text}
     }
+
+    utterance = event.get('request', {}).get('original_utterance')
+    if logs_collection and utterance != 'ping':
+        logs_collection.insert_one({
+            'request': event,
+            'response': response,
+            'time': datetime.datetime.now(),
+            'app_id': event['session'].get('application', {}).get('application_id'),
+            'utterance': utterance,
+            'response_text': response['response']['text'],
+        })
+    return response

@@ -1,11 +1,12 @@
 import requests
 import json
+import os
 import re
 
 import logging
 
 # нужно самостоятельно получить токен в https://yandex.ru/dev/translate/ и вставить сюда
-API_KEY = None
+API_KEY = os.environ.get('TRANSLATE_API_KEY')
 
 
 def get_langs_list(key=API_KEY):
