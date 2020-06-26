@@ -1,0 +1,73 @@
+root:
+    [$Translate? $Phrase $FromTo]
+    [$Translate? $Phrase $FromStrict $ToStrict]
+    [$Translate? $Phrase $FromStrict]
+    [$Translate? $Phrase $ToStrict]
+    [$Translate $Phrase?]
+    $Ellipsis
+
+slots:
+    from:
+        source: $FromLang
+        type: ELang
+    to:
+        source: $ToLang
+        type: ELang
+    phrase:
+        source: $TranslationTarget
+
+filler:
+    алиса
+
+$Ellipsis:
+    $LeftFiller* [$Phrase? $FromStrict $ToStrict?]
+    $LeftFiller* [$Phrase? $FromStrict? $ToStrict]
+    $LeftFiller+ [$Phrase $FromStrict? $ToStrict?]
+
+$LeftFiller:
+    а
+    теперь | сейчас
+    если
+
+$TranslationTarget:
+    .+
+    %negative
+    (а | теперь)+
+
+$Phrase:
+    слово? $TranslationTarget
+
+$Lang:
+    %lemma
+    $ELang
+
+$FromStrict:
+    с $FromLang
+
+$ToStrict:
+    по $ToLang
+    на $ToLang
+
+$From:
+    $FromStrict
+    $FromLang
+
+$To:
+    $ToStrict
+    $ToLang
+
+$FromTo:
+    $From $To
+
+$FromLang:
+    $Lang
+
+$ToLang:
+    $Lang
+
+$Translate:
+    %lemma
+    переведи
+    перевод
+    как будет
+    как переводится

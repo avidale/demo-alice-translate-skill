@@ -3,7 +3,7 @@ import pymongo
 import datetime
 
 
-from translation import translate, lang_to_code, is_like_russian, API_KEY
+from translation import translate, is_like_russian
 
 INTRO_TEXT = 'Привет! Вы находитесь в приватном навыке "Крот-Полиглот". ' \
     'Скажите, какое слово вы хотите перевести с какого на какой язык.' \
@@ -22,23 +22,13 @@ if MONGODB_URI:
     logs_collection = db.get_collection('logs')
 
 
-def do_translate(form, translate_state):
+def do_translate(form, translate_state, token):
     api_req = {
         'text': form['slots'].get('phrase', {}).get('value'),
         'lang_from': form['slots'].get('from', {}).get('value'),
-        'lang_to': form['slots'].get('to', {}).get('value'),            
+        'lang_to': form['slots'].get('to', {}).get('value'),
     }
     api_req = {k: v for k, v in api_req.items() if v}
-    if 'lang_from' in api_req:
-        code = lang_to_code(api_req['lang_from'])
-        if not code:
-            return 'Не поняла, на какой язык переводить', translate_state
-        api_req['lang_from'] = code
-    if 'lang_to' in api_req:
-        code = lang_to_code(api_req['lang_to'])
-        if not code:
-            return 'Не поняла, c какого языка переводить', translate_state
-        api_req['lang_to'] = code
     translate_state.update(api_req)
     if 'text' not in translate_state:
         return 'Не поняла, какой текст нужно перевести', translate_state
@@ -46,12 +36,17 @@ def do_translate(form, translate_state):
         return 'На какой язык нужно перевести?', translate_state
     if not is_like_russian(translate_state['text']) and 'lang_from' not in translate_state:
         return 'С какого языка нужно перевести?', translate_state
-    tran_error, tran_result = translate(**translate_state)
+    tran_error, tran_result = translate(**translate_state, token=token)
     text = tran_error or tran_result
     return text, translate_state
 
 
 def handler(event, context):
+    # токен для доступа к API перевода забираем прямо из функции, если у вас есть сервисный аккаунт
+    token = None
+    if context and hasattr(context, 'token') and context.token:
+        token = context.token.get('access_token')
+
     translate_state = event.get('state', {}).get('session', {}).get('translate', {})
     last_phrase = event.get('state', {}).get('session', {}).get('last_phrase')
     intents = event.get('request', {}).get('nlu', {}).get('intents', {})
@@ -60,8 +55,7 @@ def handler(event, context):
     text = INTRO_TEXT
     end_session = 'false'
 
-    translate_main = intents.get('translate_main')
-    translate_ellipsis = intents.get('translate_ellipsis')
+    translate_full = intents.get('translate_full')
     if intents.get('exit'):
         text = 'Приятно было попереводить для вас! ' \
                'Чтобы вернуться в навык, скажите "Запусти навык Крот-Полиглот". До свидания!'
@@ -72,15 +66,14 @@ def handler(event, context):
         if last_phrase:
             text = last_phrase
         else:
-            text = 'Ох, я забыла, что нужно повторить. Попросите меня лучше что-нибудь перевести.'
-    elif not API_KEY:
-        text = 'Чтобы навык заработал, нужно в переменную API_KEY вставить ключ от API Яндекс.Переводчика.'
-    elif translate_main:
-        text, translate_state = do_translate(translate_main, translate_state)
-    elif translate_ellipsis:
-        text, translate_state = do_translate(translate_ellipsis, translate_state)
+            text = 'Ох, я забыл, что нужно повторить. Попросите меня лучше что-нибудь перевести.'
+    elif not token:
+        text = 'Чтобы навык заработал, нужно при создании функции указать сервисный аккаунт, ' \
+               'тогда вы получите IAM токен для доступа к API переводчика..'
+    elif translate_full:
+        text, translate_state = do_translate(translate_full, translate_state, token=token)
     elif command:
-        text = 'Не поняла вас. Чтобы выйти из навыка "Крот-Полиглот", скажите "Хватит".'
+        text = 'Не понял вас. Чтобы выйти из навыка "Крот-Полиглот", скажите "Хватит".'
 
     response = {
         'version': event['version'],
