@@ -36,10 +36,10 @@ jobs:
     - uses: goodsmileduck/yandex-serverless-action@v1
       with:
         token: ${{ secrets.TOKEN }}
-        function_id: 'd4e1e7sjlk0l79m6fot9'
+        function_id: ${{ secrets.FUNCTION_ID }}
         runtime: 'python37-preview'
         memory: '128'
         entrypoint: 'main.handler'
-        environment: DEBUG=True,COUNT=1
+        environment: MONGODB_URI=${{ secrets.MONGODB_URI }}
         source: '.'
         exclude: 'src/'
