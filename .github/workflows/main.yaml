@@ -42,4 +42,4 @@ jobs:
         entrypoint: 'main.handler'
         environment: 'MONGODB_URI=${{ secrets.MONGODB_URI }}'
         source: '.'
-        exclude: 'src/'
+        exclude: '(grammars|image)'
