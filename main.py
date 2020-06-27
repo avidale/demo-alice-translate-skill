@@ -4,6 +4,7 @@ import datetime
 
 
 from translation import translate, is_like_russian
+from utils import replace_dotted_keys
 
 INTRO_TEXT = 'Привет! Вы находитесь в приватном навыке "Крот-Полиглот". ' \
     'Скажите, какое слово вы хотите перевести с какого на какой язык.' \
@@ -88,7 +89,7 @@ def handler(event, context):
     utterance = event.get('request', {}).get('original_utterance')
     if logs_collection and utterance != 'ping':
         logs_collection.insert_one({
-            'request': event,
+            'request': replace_dotted_keys(event),
             'response': response,
             'time': datetime.datetime.now(),
             'app_id': event['session'].get('application', {}).get('application_id'),
