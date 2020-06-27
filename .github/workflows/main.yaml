@@ -1,4 +1,4 @@
-name: Push and Deploy Serverless function
+name: Test and Deploy Serverless function
 
 on:
   push:
@@ -40,6 +40,6 @@ jobs:
         runtime: 'python37-preview'
         memory: '128'
         entrypoint: 'main.handler'
-        environment: 'MONGODB_URI="${{ secrets.MONGODB_URI }}"'
+        environment: 'MONGODB_URI=${{ secrets.MONGODB_URI }}'
         source: '.'
         exclude: 'src/'
