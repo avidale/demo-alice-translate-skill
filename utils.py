@@ -1,3 +1,6 @@
+from collections.abc import Mapping
+
+
 def replace_dotted_keys(data, dot_symbol='~'):
     """ Replace dots in dict keys with other symbols, to comply with Pymongo checks """
     if isinstance(data, Mapping):
