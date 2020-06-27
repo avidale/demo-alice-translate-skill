@@ -22,6 +22,11 @@ def detect_lang(text, token, hint='ru'):
 
 
 def translate(text, token, lang_to='ru', lang_from=None):
+    if not token:
+        error = f'Чтобы перевести "{text}" с {lang_from} на {lang_to}, ' \
+                'нужно при создании функции указать сервисный аккаунт, ' \
+                'тогда вы получите IAM токен для доступа к API переводчика.'
+        return error, None
     data = {
         'texts': [text],
         'targetLanguageCode': lang_to,

@@ -68,9 +68,6 @@ def handler(event, context):
             text = last_phrase
         else:
             text = 'Ох, я забыл, что нужно повторить. Попросите меня лучше что-нибудь перевести.'
-    elif not token:
-        text = 'Чтобы навык заработал, нужно при создании функции указать сервисный аккаунт, ' \
-               'тогда вы получите IAM токен для доступа к API переводчика..'
     elif translate_full:
         text, translate_state = do_translate(translate_full, translate_state, token=token)
     elif command:

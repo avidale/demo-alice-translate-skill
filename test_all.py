@@ -39,3 +39,9 @@ def test_translate():
         result = translate(lang_from='de', lang_to='en', token='abcde', text='katze')
         mock_post.assert_called()
     assert result == (None, 'cat')
+
+
+def test_translate_without_token():
+    error, result = translate(lang_from='de', lang_to='en', token=None, text='katze')
+    assert error
+    assert not result

@@ -40,9 +40,10 @@
    Да, перевод с его использованием будет стоить денег - но очень небольших, 
    меньше копейки за один запрос 
    (посчитать можно в [тарифах Облака](https://cloud.yandex.ru/prices)). 
-3. В редакторе кода этой функции создать файлы `main.py`, `translation.py`, 
-и `requirements.txt`, и скопипастить в них содержимое соответстующих файлов 
-из данного репозитория.
+   Это действие можно пропустить, но тогда и перевода не будет.
+3. В редакторе кода этой функции создать файлы `main.py`, `translation.py`,
+`utils.py` и `requirements.txt`, 
+и скопипастить в них содержимое соответстующих файлов из данного репозитория.
 4. В поле "точка входа" в редакторе функции ввести `main.handler` - это имя
 файла и питонячьей функции, которая собственно будет отвечать на запрос. 
 5. В [консоли разработчика навыков](https://dialogs.yandex.ru/developer/)
@@ -101,6 +102,19 @@ db = client.get_default_database()
 docs = pd.DataFrame(db.get_collection('logs').find())
 # пример анализа: получаем топ 50 запросов по популярности
 docs.utterance.value_counts().head(50)
+```
+Другой пример: просмотр сообщений из одной случайно выбранной сессии.
+```python
+docs['session_id'] = docs.request.apply(lambda x: x['session']['session_id'])
+session_ids = docs['session_id'].drop_duplicates()
+docs.loc[
+    docs['session_id'] == session_ids.sample(1).iloc[0]
+].sort_values(
+    'time'
+).loc[
+    :, ['utterance', 'response_text']
+]
+
 ```
 
 ## Уровень 3: Continuous integration
