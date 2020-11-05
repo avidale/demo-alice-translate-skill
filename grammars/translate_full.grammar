@@ -31,8 +31,6 @@ $LeftFiller:
 
 $TranslationTarget:
     .+
-    %negative
-    (а | теперь)+
 
 $Phrase:
     слово? $TranslationTarget
