@@ -43,5 +43,5 @@ jobs:
         environment: 'MONGODB_URI=${{ secrets.MONGODB_URI }}'
         source: '.'
         exclude: '(grammars|image)'
-        service_account: 'first-service-account'
+        service_account: ${{ secrets.SERVICE_ACCOUNT }}
         description: 'demo translate skill'
